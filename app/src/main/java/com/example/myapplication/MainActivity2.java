@@ -13,7 +13,6 @@ public class MainActivity2 extends AppCompatActivity {
     ViewPager2 pager2;
     FragmentAdapter adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +25,8 @@ public class MainActivity2 extends AppCompatActivity {
         adapter = new FragmentAdapter(fm, getLifecycle());
         pager2.setAdapter(adapter);
 
-        tabLayout.addTab(tabLayout.newTab().setText("First"));
-        tabLayout.addTab(tabLayout.newTab().setText("Second"));
+        tabLayout.addTab(tabLayout.newTab().setText("Luffy"));
+        tabLayout.addTab(tabLayout.newTab().setText("Zoro"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

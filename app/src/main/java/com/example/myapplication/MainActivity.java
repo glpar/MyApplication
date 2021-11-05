@@ -1,11 +1,16 @@
 package com.example.myapplication;
 
+        import android.annotation.SuppressLint;
         import android.content.Intent;
         import android.graphics.Color;
+        import android.media.MediaPlayer;
         import android.os.Bundle;
         import android.view.View;
         import android.view.View.OnClickListener;
         import android.widget.Button;
+        import android.widget.ListView;
+        import android.widget.PopupMenu;
+        import android.widget.TextView;
         import android.widget.Toast;
         import android.widget.ToggleButton;
 
@@ -23,6 +28,8 @@ package com.example.myapplication;
         import android.widget.AdapterView;
         import android.widget.Spinner;
 
+        import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
     EditText eText;
@@ -30,27 +37,81 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rl;
     AutoCompleteTextView auto;
     Spinner spnr;
+    MediaPlayer mySound;
+    ListView listView;
+
+    ArrayList<String> array;
 
     String[] celebrities = {
-            "Chris Hemsworth",
-            "Jennifer Lawrence",
-            "Jessica Alba",
-            "Brad Pitt",
-            "Tom Cruise",
-            "Johnny Depp",
-            "Megan Fox",
-            "Paul Walker",
-            "Vin Diesel"
+            "Luffy",
+            "Law",
+            "Kid",
+            "Shanks",
+            "Barba Negra",
+            "God Usopp"
     };
 
     private ToggleButton toggleButton1, toggleButton2;
     private Button btnDisplay;
     private Button button;
+    private Button button1;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TextView txtView = (TextView) findViewById(R.id.txtView);
+        txtView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // TODO Auto-generated method stub
+                Toast.makeText(getApplicationContext(),
+                        "Você me apertou demais kkkkk :)", 3000).show();
+                return true;
+            }
+        });
+        txtView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Toast.makeText(getApplicationContext(), "Não me apertou o suficiente :(",
+                        2000).show();
+            }
+        });
+        array = new ArrayList<>();
+        array.add("Luffy");
+
+        listView = findViewById(R.id.listView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, array);
+        listView.setAdapter(adapter);
+        mySound = MediaPlayer.create(this,R.raw.op);
+
+        button1 = (Button) findViewById(R.id.button1);
+        button1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(MainActivity.this, button1);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(
+                                MainActivity.this,
+                                "You Clicked : " + item.getTitle(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
+            }
+        }); //closing the setOnClickListener method
         eText = (EditText) findViewById(R.id.edittext);
         btn = (Button) findViewById(R.id.button);
         button = (Button) findViewById(R.id.button2);
@@ -94,10 +155,10 @@ public class MainActivity extends AppCompatActivity {
         addListenerOnButton();
 
         spnr = (Spinner)findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, celebrities);
 
-        spnr.setAdapter(adapter);
+        spnr.setAdapter(adapter2);
         spnr.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
 
@@ -118,6 +179,23 @@ public class MainActivity extends AppCompatActivity {
 
                 }
         );
+    }
+
+    public void Lista(){}
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mySound.release();
+    }
+    public void pauseMusic(View view) {
+        mySound.pause();
+
+    }
+
+    public void playMusic(View view) {
+        mySound.start();
+        mySound.setVolume(100,100);
     }
 
     public void addListenerOnButton() {
